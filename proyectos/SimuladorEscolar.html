@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Edad Escolar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Variables de color */
+        :root {
+            --color-primary: #3498db;
+            --color-primary-hover: #2980b9;
+            --color-text: #2c3e50;
+            --color-light: #f5f7fa;
+            --color-border: #dfe6e9;
+            --color-bg: linear-gradient(135deg, #e3e9f2 0%, #a7b8d8 100%);
+            
+            /* Colores de niveles */
+            --color-primario: #f1c40f;
+            --color-secundario-inicial: #2ecc71;
+            --color-secundario-final: #e74c3c;
+            --color-fuera-rango: #95a5a6;
+            
+            /* Efecto frost */
+            --frost-bg: rgba(255, 255, 255, 0.2);
+            --frost-blur: 10px;
+        }
+
+        /* Estilos base con cursor personalizado */
+        * {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="black" fill-opacity="0.3"/></svg>') 12 12, auto;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--color-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Efecto de click en el cursor */
+        body:active {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="black" fill-opacity="0.5"/></svg>') 12 12, auto;
+        }
+
+        /* Header con efecto frost */
+        .header-frost {
+            background: var(--frost-bg);
+            backdrop-filter: blur(var(--frost-blur));
+            -webkit-backdrop-filter: blur(var(--frost-blur));
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header-name {
+        display: inline-block;
+        background-color: #d0d0d067;       
+        text-shadow: #ffffff;
+        font-weight: bold;              
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;          
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        color: var(--color-text);
+        margin-left: 5rem;
+        }
+
+        .header-links {
+        display: flex;
+        background-color: #d0d0d067;       
+        text-shadow: #ffffff;
+        font-weight: bold;              
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;          
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        color: var(--color-text);
+        gap: 1.5rem;
+        margin-right: 5rem;
+        }
+
+        .header-links a {
+            color: var(--color-text);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-links a:hover {
+            color: var(--color-primary);
+        }
+
+        /* Contenido principal */
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2rem;
+            flex: 1;
+            align-items: center;
+        }
+
+        /* Contenedor del simulador */
+        .simulator-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 350px;
+            z-index: 10;
+        }
+
+        .simulator-title {
+            color: var(--color-text);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .simulator-description {
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Estilos del input y botón (mantenidos de tu versión) */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+            font-weight: 500;
+        }
+
+        #fechaNacimiento {
+            width: 100%;
+            max-width: 220px;
+            padding: 0.75rem;
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            text-align: center;
+            margin-top: 0.5rem;
+            transition: border-color 0.3s;
+        }
+
+        #fechaNacimiento:focus {
+            border-color: var(--color-primary);
+            outline: none;
+        }
+
+        button {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            max-width: 220px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        button:hover {
+            background: var(--color-primary-hover);
+        }
+
+        /* Resultado */
+        #resultado {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+            text-align: center;
+        }
+
+        .primario {
+            background: var(--color-primario);
+        }
+
+        .secundario-inicial {
+            background: var(--color-secundario-inicial);
+            color: white;
+        }
+
+        .secundario-final {
+            background: var(--color-secundario-final);
+            color: white;
+        }
+
+        .fuera-rango {
+            background: var(--color-fuera-rango);
+            color: white;
+        }
+
+        /* Panel de código */
+        .code-panel {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 1.5rem;
+            color: #f0f0f0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            max-width: 700px;
+            width: 100%;
+            overflow: visible;
+            z-index: 10;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        /* Footer con efecto frost */
+        .footer-frost {
+            position: fixed;
+            bottom: 0;
+            background: var(--frost-bg);
+            backdrop-filter: blur(var(--frost-blur));
+            -webkit-backdrop-filter: blur(var(--frost-blur));
+            padding: 1rem;
+            text-align: center;
+            width: 100%;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--color-text);
+            font-size: 0.9rem;
+            z-index: 999;
+        }
+
+        /* Fondo del texto dentro del footer */
+        .footer-frost .footer-text {
+        display: inline-block;
+        background-color: #d0d0d067;       
+        color: #323232;
+        text-shadow: #ffffff;
+        font-weight: bold;              
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;          
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+       /* Figuras decorativas */
+.shape {
+    position: absolute;
+    filter: blur(1px);
+    opacity: 0.8;
+    z-index: 1;
+    animation: float 15s ease-in-out infinite;
+}
+
+/* Cuadrado */
+.shape-1 {
+    width: 150px;
+    height: 150px;
+    background: #f1c40f;
+    top: 10%;
+    left: 5%;
+    border-radius: 20px; /* Borde redondeado */
+    animation-duration: 10s;
+}
+
+/* Rectángulo */
+.shape-2 {
+    width: 200px;
+    height: 100px;
+    background: #3498db;
+    bottom: 10%;
+    right: 5%;
+    border-radius: 25px; /* Borde redondeado */
+    animation-duration: 15s;
+}
+
+/* Círculo */
+.shape-3 {
+    width: 100px;
+    height: 100px;
+    background: #e74c3c;
+    top: 25%;
+    left: 10%;
+    border-radius: 50%; /* Perfecto círculo */
+    animation-duration: 7s;
+}
+
+/* Triángulo simulado con bordes redondeados */
+.shape-4 {
+    width: 0;
+    height: 0;
+    border-left: 60px solid transparent;
+    border-right: 60px solid transparent;
+    border-bottom: 120px solid #2ecc71;
+    top: 20%;
+    right: 5%;
+    animation-duration: 13s;
+    transform-origin: center;
+    border-radius: 20px; /* Simulación visual */
+}
+
+/* Flotación y rotación */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(180deg);
+    }
+    50% {
+        transform: translateY(-40px) rotate(5deg);
+    }
+}
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .simulator-container, .code-panel {
+                max-width: 100%;
+            }
+            
+            .header-frost {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+            
+            .header-links {
+                margin-right: 0;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Figuras decorativas -->
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+
+    <!-- Header -->
+    <header class="header-frost">
+        <div class="header-name">Marcos R. Merlo</div>
+        <div class="header-links">
+            <a href="https://wa.me/18295870648" target="_blank">
+                <i class="fab fa-whatsapp"></i> +1 829-587-0648
+            </a>
+            <a href="https://github.com/roky146" target="_blank">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <!-- Simulador -->
+        <div class="simulator-container">
+            <h1 class="simulator-title">Simulador de Edad Escolar</h1>
+            <p class="simulator-description">
+                Ingresa tu fecha de nacimiento para determinar tu nivel educativo actual según el sistema escolar dominicano.
+            </p>
+            
+            <div class="input-group">
+                <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                <input type="date" id="fechaNacimiento" required>
+            </div>
+            
+            <button onclick="calcularNivel()">Calcular Nivel</button>
+            
+            <div id="resultado"></div>
+        </div>
+
+        <!-- Panel de código -->
+        <div class="code-panel">
+            <pre><code>// <span class="code-comment">Función para calcular el nivel escolar</span>
+<span class="code-keyword">function</span> <span class="code-function">calcularNivel</span>() {
+    <span class="code-comment">// Obtener fecha de nacimiento del input</span>
+    <span class="code-keyword">const</span> fechaNacimiento = <span class="code-keyword">new</span> <span class="code-function">Date</span>(document.<span class="code-function">getElementById</span>(<span class="code-string">'fechaNacimiento'</span>).value);
+    <span class="code-keyword">const</span> hoy = <span class="code-keyword">new</span> <span class="code-function">Date</span>();
+    
+    <span class="code-comment">// Calcular edad básica</span>
+    <span class="code-keyword">let</span> edad = hoy.<span class="code-function">getFullYear</span>() - fechaNacimiento.<span class="code-function">getFullYear</span>();
+    <span class="code-keyword">const</span> mes = hoy.<span class="code-function">getMonth</span>() - fechaNacimiento.<span class="code-function">getMonth</span>();
+    
+    <span class="code-comment">// Ajustar edad si aún no ha pasado el mes de cumpleaños</span>
+    <span class="code-keyword">if</span> (mes < 0 || (mes === 0 && hoy.<span class="code-function">getDate</span>() < fechaNacimiento.<span class="code-function">getDate</span>())) {
+        edad--;
+    }
+    
+    <span class="code-comment">// Determinar y mostrar el nivel escolar</span>
+    <span class="code-keyword">const</span> resultado = document.<span class="code-function">getElementById</span>(<span class="code-string">'resultado'</span>);
+    resultado.style.display = <span class="code-string">'block'</span>;
+    
+    <span class="code-keyword">if</span> (edad < 12) {
+        resultado.textContent = <span class="code-string">`Tienes ${edad} años: Nivel Primario`</span>;
+        resultado.className = <span class="code-string">'primario'</span>;
+    } <span class="code-keyword">else if</span> (edad >= 12 && edad <= 15) {
+        resultado.textContent = <span class="code-string">`Tienes ${edad} años: Nivel Secundario Inicial`</span>;
+        resultado.className = <span class="code-string">'secundario-inicial'</span>;
+    } <span class="code-keyword">else if</span> (edad >= 16 && edad <= 18) {
+        resultado.textContent = <span class="code-string">`Tienes ${edad} años: Nivel Secundario Final`</span>;
+        resultado.className = <span class="code-string">'secundario-final'</span>;
+    } <span class="code-keyword">else</span> {
+        resultado.textContent = <span class="code-string">`Tienes ${edad} años: Fuera del rango escolar`</span>;
+        resultado.className = <span class="code-string">'fuera-rango'</span>;
+    }
+}</code></pre>
+        </div>
+    </main>
+
+    <!-- Footer -->
+ <footer class="footer-frost">
+    <span class="footer-text">
+        Para: Teorema/INFOTEP | Catedrático: Ángel Arnaldo Rodríguez
+    </span>
+</footer>
+
+    <script>
+        // Función para calcular el nivel escolar (mantenida de tu versión)
+        function calcularNivel() {
+            const fechaNacimiento = new Date(document.getElementById('fechaNacimiento').value);
+            const hoy = new Date();
+            
+            // Calcular edad
+            let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+            const mes = hoy.getMonth() - fechaNacimiento.getMonth();
+            
+            if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+                edad--;
+            }
+            
+            // Determinar nivel escolar
+            const resultado = document.getElementById('resultado');
+            resultado.style.display = 'block';
+            
+            if (edad < 12) {
+                resultado.textContent = `Tienes ${edad} años: Nivel Primario`;
+                resultado.className = 'primario';
+            } else if (edad >= 12 && edad <= 15) {
+                resultado.textContent = `Tienes ${edad} años: Nivel Secundario Inicial`;
+                resultado.className = 'secundario-inicial';
+            } else if (edad >= 16 && edad <= 18) {
+                resultado.textContent = `Tienes ${edad} años: Nivel Secundario Final`;
+                resultado.className = 'secundario-final';
+            } else {
+                resultado.textContent = `Tienes ${edad} años: Fuera del rango escolar`;
+                resultado.className = 'fuera-rango';
+            }
+        }
+
+        // Efecto de click en el cursor
+        document.addEventListener('click', function(e) {
+            const cursor = document.createElement('div');
+            cursor.style.position = 'fixed';
+            cursor.style.width = '24px';
+            cursor.style.height = '24px';
+            cursor.style.borderRadius = '50%';
+            cursor.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+            cursor.style.pointerEvents = 'none';
+            cursor.style.left = (e.clientX - 12) + 'px';
+            cursor.style.top = (e.clientY - 12) + 'px';
+            cursor.style.transform = 'scale(0.5)';
+            cursor.style.transition = 'transform 0.3s ease, opacity 0.5s ease';
+            cursor.style.zIndex = '9999';
+            
+            document.body.appendChild(cursor);
+            
+            setTimeout(() => {
+                cursor.style.transform = 'scale(1.15)';
+            }, 10);
+            
+            setTimeout(() => {
+                cursor.style.transform = 'scale(1)';
+                cursor.style.opacity = '0';
+            }, 300);
+            
+            setTimeout(() => {
+                cursor.remove();
+            }, 800);
+        });
+    </script>
+</body>
+</html>

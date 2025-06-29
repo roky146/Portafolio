@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyectos HTML | roky146</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Variables de color */
+:root {
+    --color-primary: #3498db;
+    --color-primary-hover: #2980b9;
+    --color-text: #2c3e50;
+    --color-light: #f5f7fa;
+    --color-border: #dfe6e9;
+    --color-bg: linear-gradient(135deg, #e3e9f2 0%, #a7b8d8 100%);
+    
+    /* Efecto frost */
+    --frost-bg: rgba(255, 255, 255, 0.2);
+    --frost-blur: 10px;
+}
+
+/* Estilos base con cursor personalizado */
+* {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="black" fill-opacity="0.3"/></svg>') 12 12, auto;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    position: relative;
+    padding-bottom: 60px;
+}
+
+body:active {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="black" fill-opacity="0.5"/></svg>') 12 12, auto;
+}
+
+/* Scrollbar general */
+body::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+/* Track (fondo de la barra) */
+body::-webkit-scrollbar-track {
+    background: #ecf0f1;
+    border-radius: 10px;
+}
+
+/* Thumb (barra que se mueve) */
+body::-webkit-scrollbar-thumb {
+    background: #3498db;
+    border-radius: 10px;
+}
+
+/* Hover en el thumb */
+body::-webkit-scrollbar-thumb:hover {
+    background: #2980b9;
+}
+
+
+/* Header */
+.header-frost {
+    background: var(--frost-bg);
+    backdrop-filter: blur(var(--frost-blur));
+    -webkit-backdrop-filter: blur(var(--frost-blur));
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.header-name,
+.header-links {
+    background-color: #d0d0d067;
+    text-shadow: #ffffff;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    color: var(--color-text);
+}
+
+.header-name {
+    margin-left: 5rem;
+}
+
+.header-links {
+    display: flex;
+    gap: 1.5rem;
+    margin-right: 5rem;
+}
+
+.header-links a {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.header-links a:hover {
+    color: var(--color-primary);
+}
+
+/* Contenido principal */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+    flex: 1;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.page-title {
+    color: var(--color-text);
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+    position: relative;
+}
+
+.page-title::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 4px;
+    background: var(--color-primary);
+    margin: 0.5rem auto;
+    border-radius: 2px;
+}
+
+.page-description {
+    color: #7f8c8d;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    max-width: 800px;
+}
+
+/* Grid de proyectos */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+/* Tarjeta de proyecto */
+.project-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.project-button {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.6rem 1.2rem;
+    background-color: var(--color-primary);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.project-button:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.project-thumbnail-container {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.project-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px 15px 0 0;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-thumbnail {
+    transform: scale(1.05);
+}
+
+.project-info {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-title {
+    color: var(--color-text);
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+}
+
+.project-description {
+    color: #7f8c8d;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* Modal */
+.project-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.project-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.project-modal-content {
+    background: white;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 800px;
+    padding: 2rem;
+    position: relative;
+    animation: zoomIn 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.project-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: var(--color-text);
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    background: var(--color-light);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: background 0.3s;
+}
+
+.project-modal-close:hover {
+    background: var(--color-border);
+}
+
+.project-modal-title {
+    color: var(--color-text);
+    margin-top: 0;
+    font-size: 2rem;
+}
+
+.project-modal-description {
+    color: #7f8c8d;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.project-modal-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.project-modal-image {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+/* Footer */
+.footer-frost {
+    background: var(--frost-bg);
+    backdrop-filter: blur(var(--frost-blur));
+    -webkit-backdrop-filter: blur(var(--frost-blur));
+    padding: 1rem;
+    text-align: center;
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--color-text);
+    font-size: 0.9rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.footer-frost .footer-text {
+    display: inline-block;
+    background-color: #d0d0d067;
+    color: #323232;
+    text-shadow: #ffffff;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+/* Figuras decorativas */
+.shape {
+    position: absolute;
+    filter: blur(1px);
+    opacity: 0.8;
+    z-index: 1;
+    animation: float 15s ease-in-out infinite;
+}
+
+.shape-1 {
+    width: 150px;
+    height: 150px;
+    background: #f1c40f;
+    top: 10%;
+    left: 5%;
+    border-radius: 20px;
+    animation-duration: 10s;
+}
+
+.shape-2 {
+    width: 200px;
+    height: 100px;
+    background: #3498db;
+    bottom: 10%;
+    right: 5%;
+    border-radius: 25px;
+    animation-duration: 15s;
+}
+
+.shape-3 {
+    width: 100px;
+    height: 100px;
+    background: #e74c3c;
+    top: 25%;
+    left: 10%;
+    border-radius: 50%;
+    animation-duration: 7s;
+}
+
+.shape-4 {
+    width: 0;
+    height: 0;
+    border-left: 60px solid transparent;
+    border-right: 60px solid transparent;
+    border-bottom: 120px solid #2ecc71;
+    top: 20%;
+    right: 5%;
+    animation-duration: 13s;
+    transform-origin: center;
+    border-radius: 20px;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(180deg);
+    }
+    50% {
+        transform: translateY(-40px) rotate(5deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .header-frost {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
+    }
+    
+    .header-name {
+        margin-left: 0;
+    }
+    
+    .header-links {
+        margin-right: 0;
+        gap: 1rem;
+    }
+    
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <!-- Figuras decorativas -->
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+
+    <!-- Header -->
+    <header class="header-frost">
+        <div class="header-name">roky146 | Proyectos HTML</div>
+        <div class="header-links">
+            <a href="https://wa.me/18295870648" target="_blank">
+                <i class="fab fa-whatsapp"></i> +1 829-587-0648
+            </a>
+            <a href="https://github.com/roky146" target="_blank">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <h1 class="page-title">Mis Proyectos HTML</h1>
+        <p class="page-description">
+            Explora mis proyectos creados con HTML, CSS y JavaScript. Haz clic en cualquier proyecto para ver más detalles.
+        </p>
+
+        <div class="projects-grid">
+            <!-- Proyecto 1 -->
+            <div class="project-card" onclick="openProjectModal('proyecto1')">
+                <div class="project-thumbnail-container">
+                    <img src="img/SimuladorEdad.png" alt="Proyecto 1" class="project-thumbnail">
+                </div>
+                <div class="project-info">
+                    <h3 class="project-title">Simulador de Edad Escolar</h3>
+                    <p class="project-description">Calcula el nivel educativo según la edad del estudiante.</p>
+                    <div class="project-tech">
+                        <img src="https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white&style=flat" alt="HTML5">
+                        <img src="https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white&style=flat" alt="CSS3">
+                        <img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black&style=flat" alt="JavaScript">
+                    </div>
+                    <a href="proyectos/SimuladorEscolar.html" target="_blank" class="project-button">Ver Proyecto</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de proyecto 1 -->
+        <div class="project-modal" id="proyecto1">
+            <div class="project-modal-content" onclick="event.stopPropagation()">
+                <span class="project-modal-close" onclick="closeProjectModal('proyecto1')">&times;</span>
+                <h2 class="project-modal-title">Simulador de Edad Escolar</h2>
+                <p class="project-modal-description">
+                    Este proyecto calcula el nivel educativo de un estudiante según su fecha de nacimiento, 
+                    basado en el sistema escolar dominicano. Incluye efectos visuales modernos y diseño responsivo.
+                </p>
+                <div class="project-modal-tech">
+                    <img src="https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white&style=flat" alt="HTML5">
+                    <img src="https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white&style=flat" alt="CSS3">
+                    <img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black&style=flat" alt="JavaScript">
+                    <img src="https://img.shields.io/badge/Font_Awesome-339AF0?logo=fontawesome&logoColor=white&style=flat" alt="Font Awesome">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-frost">
+        <span class="footer-text">
+            roky146 | 2025-2026
+        </span>
+    </footer>
+
+    <script>
+        // Función para abrir modal de proyecto
+        function openProjectModal(projectId) {
+            const modal = document.getElementById(projectId);
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Función para cerrar modal de proyecto
+        function closeProjectModal(projectId) {
+            const modal = document.getElementById(projectId);
+            modal.classList.remove('active');
+            setTimeout(() => {
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        // Cerrar modales al hacer clic fuera del contenido
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('project-modal')) {
+                event.target.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Efecto de click en el cursor
+        document.addEventListener('click', function(e) {
+            const cursor = document.createElement('div');
+            cursor.style.position = 'fixed';
+            cursor.style.width = '24px';
+            cursor.style.height = '24px';
+            cursor.style.borderRadius = '50%';
+            cursor.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+            cursor.style.pointerEvents = 'none';
+            cursor.style.left = (e.clientX - 12) + 'px';
+            cursor.style.top = (e.clientY - 12) + 'px';
+            cursor.style.transform = 'scale(0.5)';
+            cursor.style.transition = 'transform 0.3s ease, opacity 0.5s ease';
+            cursor.style.zIndex = '9999';
+            document.body.appendChild(cursor);
+
+            setTimeout(() => {
+                cursor.style.transform = 'scale(1.15)';
+            }, 10);
+
+            setTimeout(() => {
+                cursor.style.transform = 'scale(1)';
+                cursor.style.opacity = '0';
+            }, 300);
+
+            setTimeout(() => {
+                cursor.remove();
+            }, 800);
+        });
+    </script>
+</body>
+</html>
