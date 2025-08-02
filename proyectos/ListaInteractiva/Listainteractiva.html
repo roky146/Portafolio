@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Tareas Interactiva</title>
+  <link rel="stylesheet" href="styles-tareas.css">
+</head>
+<body>
+  <div class="app-container">
+    <h1>📋 Lista de Tareas</h1>
+    <div class="input-container">
+      <input type="text" id="taskInput" placeholder="Escribe una tarea...">
+      <button id="addBtn">➕ Agregar</button>
+      <button id="sortBtn">🔤 Ordenar</button>
+    </div>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Buscar tareas...">
+    </div>
+    <ul id="taskList"></ul>
+  </div>
+  <script src="script-tareas.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tienda Virtual</title>
+  <link rel="stylesheet" href="styles-carrito.css">
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <h1>🛍️ Tienda Virtual</h1>
+      <div class="cart-icon" id="cart-toggle">
+        🛒 <span id="cart-count">0</span>
+      </div>
+    </header>
+
+    <main>
+      <div class="store-container" id="store"></div>
+    </main>
+
+    <div class="cart-container" id="cart">
+      <div class="cart-header">
+        <h2>Tu Carrito</h2>
+        <button id="close-cart">✕</button>
+      </div>
+      <div class="cart-items" id="cart-items"></div>
+      <div class="cart-summary">
+        <div class="discount-notice" id="discount-notice" style="display: none;">
+          ¡Descuento del 10% aplicado por compra mayor a $100!
+        </div>
+        <div class="total">
+          <span>Total:</span>
+          <span id="cart-total">$0</span>
+        </div>
+        <button class="checkout-btn" id="checkout-btn">Proceder al Pago</button>
+      </div>
+    </div>
+
+    <div class="checkout-modal" id="checkout-modal">
+      <div class="modal-content">
+        <h2>Finalizar Compra</h2>
+        <div class="cart-summary" id="checkout-summary"></div>
+        <form id="payment-form">
+          <div class="form-group">
+            <label for="name">Nombre completo</label>
+            <input type="text" id="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" required>
+          </div>
+          <div class="form-actions">
+            <button type="button" id="cancel-payment">Cancelar</button>
+            <button type="submit">Pagar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="confirmation-modal" id="confirmation-modal">
+      <div class="modal-content">
+        <h2>¡Pedido Procesado Correctamente! 🎉</h2>
+        <p id="confirmation-message"></p>
+        <button id="close-confirmation">Volver a la Tienda</button>
+      </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+  </div>
+
+  <script src="script-carrito.js"></script>
+</body>
+</html>
